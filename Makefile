@@ -3,3 +3,6 @@ lint:
 
 gendiff:
 	node gendiff.js
+
+gendiff:
+	node gendiff.js
