@@ -13,20 +13,34 @@
 
 ## Установка
 
-<!-- Опишите установку: клонирование, зависимости, переменные окружения -->
-
 ```bash
 git clone https://github.com/paralelno/frontend-project-46.git
 cd frontend-project-46
+make install
 ```
 
 ## Использование
 
 ```bash
-gendiff file1.json file2.json
+gendiff file1.json file2.json                 # stylish (по умолчанию)
+gendiff file1.yml file2.yml -f stylish        # явное указание формата
+node gendiff.js -h                            # справка
 ```
 
-Демонстрация (запись терминала с примером работы, включая справку и сравнение): [DEMO.md](DEMO.md)
+Вложенные структуры:
+
+```bash
+gendiff fixtures/nested/file1.json fixtures/nested/file2.json
+```
+
+Демонстрация (запись терминала с примером работы, включая справку, плоский и вложенный диф): [DEMO.md](DEMO.md)
+
+## Тесты
+
+```bash
+make test          # vitest run
+make lint          # eslint .
+```
 
 ---
 

@@ -1,8 +1,13 @@
+.PHONY: install lint test gendiff
+
+install:
+	npm ci
+
 lint:
 	npx eslint .
 
-gendiff:
-	node gendiff.js
+test:
+	npx vitest run
 
 gendiff:
 	node gendiff.js

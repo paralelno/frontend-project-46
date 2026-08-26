@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "Вычислитель отличий — uтилита для сравнения JSON/YAML файлов",
+  "description": "\u0412\u044b\u0447\u0438\u0441\u043b\u0438\u0442\u0435\u043b\u044c \u043e\u0442\u043b\u0438\u0447\u0438\u0439 \u2014 u\u0442\u0438\u043b\u0438\u0442\u0430 \u0434\u043b\u044f \u0441\u0440\u0430\u0432\u043d\u0435\u043d\u0438\u044f JSON/YAML \u0444\u0430\u0439\u043b\u043e\u0432",
   "type": "module",
   "bin": {
     "gendiff": "gendiff.js"
@@ -15,6 +15,12 @@
   },
   "devDependencies": {
     "eslint": "^8.57.1",
-    "eslint-config-airbnb-base": "^15.0.0"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "vitest": "^4.1.11"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run",
+    "gendiff": "node gendiff.js"
   }
 }

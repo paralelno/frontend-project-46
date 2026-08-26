@@ -2,40 +2,46 @@ import lodash from 'lodash';
 
 const { sortBy } = lodash;
 
-const DIFF_MARKS = {
-  REMOVED: '-',
-  ADDED: '+',
-  UNCHANGED: ' ',
+export const STATUS = {
+  SAME: 'same',
+  ADDED: 'added',
+  REMOVED: 'removed',
+  UPDATED: 'updated',
 };
 
-const formatValue = (value) => {
-  if (value === null) return 'null';
-  if (value === undefined) return 'undefined';
-  if (typeof value === 'string') return value;
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-  return JSON.stringify(value);
+export const isObject = (value) => value !== null
+  && typeof value === 'object'
+  && !Array.isArray(value);
+
+const genDiffItem = (oldValueForKey, newValueForKey, key) => {
+  if (isObject(oldValueForKey) && isObject(newValueForKey)) {
+    return {
+      status: STATUS.SAME,
+      key,
+      // eslint-disable-next-line no-use-before-define
+      children: genDiff(oldValueForKey, newValueForKey),
+    };
+  }
+  if (oldValueForKey === undefined) {
+    return { status: STATUS.ADDED, key, value: newValueForKey };
+  }
+  if (newValueForKey === undefined) {
+    return { status: STATUS.REMOVED, key, value: oldValueForKey };
+  }
+  if (oldValueForKey !== newValueForKey) {
+    return {
+      status: STATUS.UPDATED,
+      key,
+      value: newValueForKey,
+      oldValue: oldValueForKey,
+    };
+  }
+  return { status: STATUS.SAME, key, value: oldValueForKey };
 };
 
-const genDiff = (data1, data2) => {
-  const keys = Array.from(new Set([...Object.keys(data1), ...Object.keys(data2)]));
-  const sortedKeys = sortBy(keys, (key) => key);
-
-  const lines = sortedKeys
-    .map((key) => {
-      const inFirst = Object.prototype.hasOwnProperty.call(data1, key);
-      const inSecond = Object.prototype.hasOwnProperty.call(data2, key);
-      if (inFirst && inSecond && data1[key] === data2[key]) {
-        return `  ${DIFF_MARKS.UNCHANGED} ${key}: ${formatValue(data1[key])}`;
-      }
-      if (inFirst && !inSecond) return `  ${DIFF_MARKS.REMOVED} ${key}: ${formatValue(data1[key])}`;
-      if (!inFirst && inSecond) return `  ${DIFF_MARKS.ADDED} ${key}: ${formatValue(data2[key])}`;
-      return [
-        `  ${DIFF_MARKS.REMOVED} ${key}: ${formatValue(data1[key])}`,
-        `  ${DIFF_MARKS.ADDED} ${key}: ${formatValue(data2[key])}`,
-      ].join('\n');
-    });
-
-  return ['{', ...lines, '}'].join('\n');
-};
+function genDiff(oldValue, newValue) {
+  const keys = sortBy([...new Set([...Object.keys(oldValue), ...Object.keys(newValue)])]);
+  return keys.map((key) => genDiffItem(oldValue[key], newValue[key], key));
+}
 
 export default genDiff;

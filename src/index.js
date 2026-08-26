@@ -1,6 +1,10 @@
-import genDiff from './diff.js';
 import parse from './parser.js';
+import genDiff from './diff.js';
+import formatStylish from './stylish.js';
 
-const compareFiles = (filepath1, filepath2) => genDiff(parse(filepath1), parse(filepath2));
+const genDiffFiles = (filepath1, filepath2) => {
+  const diff = genDiff(parse(filepath1), parse(filepath2));
+  return formatStylish(diff);
+};
 
-export default compareFiles;
+export default genDiffFiles;
