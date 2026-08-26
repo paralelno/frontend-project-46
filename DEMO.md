@@ -111,3 +111,146 @@ Options:
   -f, --format [type]  output format
   -h, --help           display help for command
 ```
+
+
+## Plain (текстовый формат)
+
+```console
+$ gendiff --format plain fixtures/nested/file1.json fixtures/nested/file2.json
+
+Property 'common.follow' was added with value: false
+Property 'common.setting2' was removed
+Property 'common.setting3' was updated. From true to null
+Property 'common.setting4' was added with value: 'blah blah'
+Property 'common.setting5' was added with value: [complex value]
+Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
+Property 'common.setting6.ops' was added with value: 'vops'
+Property 'group1.baz' was updated. From 'bas' to 'bars'
+Property 'group1.nest' was updated. From [complex value] to 'str'
+Property 'group2' was removed
+Property 'group3' was added with value: [complex value]
+```
+
+
+## JSON (структурированный вывод)
+
+```console
+$ gendiff --format json fixtures/nested/file1.json fixtures/nested/file2.json
+
+[
+  {
+    "status": "same",
+    "key": "common",
+    "children": [
+      {
+        "status": "added",
+        "key": "follow",
+        "value": false
+      },
+      {
+        "status": "same",
+        "key": "setting1",
+        "value": "Value 1"
+      },
+      {
+        "status": "removed",
+        "key": "setting2",
+        "value": 200
+      },
+      {
+        "status": "updated",
+        "key": "setting3",
+        "value": null,
+        "oldValue": true
+      },
+      {
+        "status": "added",
+        "key": "setting4",
+        "value": "blah blah"
+      },
+      {
+        "status": "added",
+        "key": "setting5",
+        "value": {
+          "key5": "value5"
+        }
+      },
+      {
+        "status": "same",
+        "key": "setting6",
+        "children": [
+          {
+            "status": "same",
+            "key": "doge",
+            "children": [
+              {
+                "status": "updated",
+                "key": "wow",
+                "value": "so much",
+                "oldValue": ""
+              }
+            ]
+          },
+          {
+            "status": "same",
+            "key": "key",
+            "value": "value"
+          },
+          {
+            "status": "added",
+            "key": "ops",
+            "value": "vops"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "status": "same",
+    "key": "group1",
+    "children": [
+      {
+        "status": "updated",
+        "key": "baz",
+        "value": "bars",
+        "oldValue": "bas"
+      },
+      {
+        "status": "same",
+        "key": "foo",
+        "value": "bar"
+      },
+      {
+        "status": "updated",
+        "key": "nest",
+        "value": "str",
+        "oldValue": {
+          "key": "value"
+        }
+      }
+    ]
+  },
+  {
+    "status": "removed",
+    "key": "group2",
+    "value": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
+      }
+    }
+  },
+  {
+    "status": "added",
+    "key": "group3",
+    "value": {
+      "deep": {
+        "id": {
+          "number": 45
+        }
+      },
+      "fee": 100500
+    }
+  }
+]
+```

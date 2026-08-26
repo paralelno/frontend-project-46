@@ -23,7 +23,8 @@ make install
 
 ```bash
 gendiff file1.json file2.json                 # stylish (по умолчанию)
-gendiff file1.yml file2.yml -f stylish        # явное указание формата
+gendiff file1.yml file2.yml -f plain          # текстовый формат
+gendiff file1.json file2.json -f json         # структурированный JSON
 node gendiff.js -h                            # справка
 ```
 

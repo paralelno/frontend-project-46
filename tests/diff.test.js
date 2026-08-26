@@ -6,6 +6,7 @@ import parse from '../src/parser.js';
 import genDiff from '../src/diff.js';
 import formatPlain from '../src/formatters/plain.js';
 import formatStylish from '../src/formatters/stylish.js';
+import formatJson from '../src/formatters/json.js';
 import getFormatter, { formatters, DEFAULT_FORMATTER } from '../src/formatters/index.js';
 
 const dirName = path.dirname(fileURLToPath(import.meta.url));
@@ -61,9 +62,29 @@ describe('plain formatter', () => {
   });
 });
 
+describe('json formatter', () => {
+  it('serialises the diff tree as JSON', () => {
+    const diff = genDiff(readFixture('file1.json'), readFixture('file2.json'));
+    const result = formatJson(diff);
+    const parsed = JSON.parse(result);
+    expect(Array.isArray(parsed)).toBe(true);
+    expect(parsed[0].key).toBe('common');
+    expect(parsed[0].children).toBeDefined();
+    expect(parsed[2]).toMatchObject({ status: 'removed', key: 'group2' });
+    expect(parsed[3]).toMatchObject({ status: 'added', key: 'group3' });
+  });
+
+  it('is valid pretty-printed JSON (2-space indent)', () => {
+    const diff = genDiff(readFixture('file1.json'), readFixture('file2.json'));
+    const result = formatJson(diff);
+    expect(result).toBe(JSON.stringify(diff, null, 2));
+    expect(result).toContain('\n  ');
+  });
+});
+
 describe('formatter selection', () => {
-  it('exposes plain and stylish formatters', () => {
-    expect(Object.keys(formatters)).toEqual(['plain', 'stylish']);
+  it('exposes plain, stylish and json formatters', () => {
+    expect(Object.keys(formatters)).toEqual(['plain', 'stylish', 'json']);
     expect(DEFAULT_FORMATTER).toBe(formatStylish);
   });
 
