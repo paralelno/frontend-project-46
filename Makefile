@@ -1,0 +1,5 @@
+lint:
+	npx eslint .
+
+gendiff:
+	node gendiff.js
