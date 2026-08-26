@@ -1,5 +1,5 @@
 import lodash from 'lodash';
-import { STATUS, isObject } from './diff.js';
+import { STATUS, isObject } from '../diff.js';
 
 const { sortBy } = lodash;
 
